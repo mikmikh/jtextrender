@@ -12,7 +12,7 @@ import { loadTexture, loadWavefrontObjectInfo } from "./util/wavefront.js";
 
 const vsize = [64, 64];
 const fov = Math.PI / 2;
-const zfar = 5;
+const zfar = 8;
 const znear = 0.1;
 
 const jrenderer = new JRenderer(vsize, fov, znear, zfar);
@@ -151,11 +151,15 @@ function applyControls(controls, dt) {
   camera.position = addV(camera.position, mulS(offset, speed * dt));
 
   if (controls["lookup"]) {
-    camera.pitch = Math.min(camera.pitch + dt, Math.PI / 2 - 0.01);
+    camera.pitch = camera.pitch + dt; // Math.min(camera.pitch + dt, Math.PI / 2 - 0.01);
   }
   if (controls["lookdown"]) {
-    camera.pitch = Math.max(camera.pitch - dt, -Math.PI / 2 + 0.01);
+    camera.pitch = camera.pitch - dt; // Math.max(camera.pitch - dt, -Math.PI / 2 + 0.01);
   }
+  camera.pitch = Math.min(
+    Math.PI / 2 - 0.01,
+    Math.max(-Math.PI / 2 + 0.01, camera.pitch)
+  );
   if (controls["lookleft"]) {
     camera.yaw += dt;
   }
@@ -210,10 +214,32 @@ Promise.all([loadTexture("./data/example.png", [64, 64])]).then(([texture]) => {
   planeMesh.material.texture = texture;
 });
 
-// const viewWrapperEl = document.getElementById("view-wrapper");
-// viewWrapperEl.addEventListener("click", async () => {
-//   console.log("click");
-//   await viewWrapperEl.requestPointerLock({
-//     unadjustedMovement: true,
-//   });
-// });
+const viewWrapperEl = document.getElementById("view-wrapper");
+viewWrapperEl.addEventListener("click", async () => {
+  console.log("click");
+  await viewWrapperEl.requestPointerLock({
+    unadjustedMovement: true,
+  });
+});
+
+document.addEventListener("pointerlockchange", lockChangeAlert);
+
+function lockChangeAlert() {
+  if (document.pointerLockElement === viewWrapperEl) {
+    console.log("The pointer lock status is now locked");
+    document.addEventListener("mousemove", updatePosition);
+  } else {
+    console.log("The pointer lock status is now unlocked");
+    document.removeEventListener("mousemove", updatePosition);
+  }
+}
+
+function updatePosition(e) {
+  camera.yaw -= e.movementX * 0.005;
+  camera.pitch -= e.movementY* 0.005;
+
+  camera.pitch = Math.min(
+    Math.PI / 2 - 0.01,
+    Math.max(-Math.PI / 2 + 0.01, camera.pitch)
+  );
+}

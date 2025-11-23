@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JTex3d</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- for textures -->
+    <canvas class="hide" id="canvas" width="128" height="128"></canvas>
+    <div class="row wrap" id="view-wrapper">
+      <div id="view" class="grid"></div>
+    </div>
+    <div class="controls">
+      <div class="row wrap">
+        <div class="col">
+          <div class="row">
+            <button class="col btn" id="btn-up">Up (q)</button>
+            <button class="col btn" id="btn-forward">Forward (w)</button>
+            <button class="col btn" id="btn-down">Down (e)</button>
+          </div>
+          <div class="row">
+            <button class="col btn" id="btn-left">Left (a)</button>
+            <button class="col btn" id="btn-backward">Backward (s)</button>
+            <button class="col btn" id="btn-right">Right (d)</button>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row">
+            <button class="col btn" id="btn-lookup">Look Up (Arrow Up)</button>
+          </div>
+          <div class="row">
+            <button class="col btn" id="btn-lookleft">
+              Look Left (Arrow Left)
+            </button>
+            <button class="col btn" id="btn-lookdown">
+              Look Down (Arrow Down)
+            </button>
+            <button class="col btn" id="btn-lookright">
+              Look Right (Arrow Right)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
